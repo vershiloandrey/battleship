@@ -309,7 +309,7 @@ public class BotsGame extends JFrame {
             }
         }
         int n = 0;
-        while (n != 8) {
+        while (n != 9) {
             Random ri = new Random();
             int k = ri.nextInt(10);
             Random rj = new Random();
