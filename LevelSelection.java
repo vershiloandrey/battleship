@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by 0 on 013 13.04.16.
  */
-public class LevelSelection extends JFrame {
+public class LevelSelection extends JFrame implements Defines{
     public LevelSelection() {
         super("Морской бой - Режим игры");
         setLayout(new FlowLayout());
@@ -24,7 +24,7 @@ public class LevelSelection extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 GameWindow gameWindow = new GameWindow();
-                gameWindow.setSize(1000, 700);
+                gameWindow.setSize(SIZE_WINDOW_HORIZONTAL, SIZE_WINDOW_VERTICAL);
                 gameWindow.setResizable(false);
                 gameWindow.setLocationRelativeTo(null);
                 gameWindow.setVisible(true);
@@ -36,7 +36,7 @@ public class LevelSelection extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 GameWindow gameWindow = new GameWindow();
-                gameWindow.setSize(1000, 700);
+                gameWindow.setSize(SIZE_WINDOW_HORIZONTAL, SIZE_WINDOW_VERTICAL);
                 gameWindow.setResizable(false);
                 gameWindow.setLocationRelativeTo(null);
                 gameWindow.setVisible(true);
@@ -48,7 +48,7 @@ public class LevelSelection extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 GameWindow gameWindow = new GameWindow();
-                gameWindow.setSize(1000, 700);
+                gameWindow.setSize(SIZE_WINDOW_HORIZONTAL, SIZE_WINDOW_VERTICAL);
                 gameWindow.setResizable(false);
                 gameWindow.setLocationRelativeTo(null);
                 gameWindow.setVisible(true);

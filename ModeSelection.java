@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by 0 on 008 08.04.16.
  */
-public class ModeSelection extends JFrame {
+public class ModeSelection extends JFrame implements Defines{
     public ModeSelection() {
         super("Морской бой - Режим игры");
         setLayout(new FlowLayout());
@@ -36,7 +36,7 @@ public class ModeSelection extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 BotsGame botsGame = new BotsGame();
-                botsGame.setSize(1000, 700);
+                botsGame.setSize(SIZE_WINDOW_HORIZONTAL, SIZE_WINDOW_VERTICAL);
                 botsGame.setResizable(false);
                 botsGame.setLocationRelativeTo(null);
                 botsGame.setVisible(true);

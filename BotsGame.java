@@ -12,25 +12,25 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by 0 on 008 08.04.16.
  */
-public class BotsGame extends JFrame {
-    JButton field_ms1player[][];
-    JButton field_ms2player[][];
+public class BotsGame extends JFrame implements Defines{
+    JButton oneField[][];
+    JButton twoField[][];
 
-    int msPlayerField[][];                                                                                              // В НОВЫЙ КЛАСС. массив, в котором будет хранится состояние поля
-    int msPlayer2Field[][];                                                                                             // 0 - пусто, 1 - корабль, 2 - использованная ячейка
+    int saveOneField[][];                                                                                              // В НОВЫЙ КЛАСС. массив, в котором будет хранится состояние поля
+    int saveTwoField[][];                                                                                             // 0 - пусто, 1 - корабль, 2 - использованная ячейка
 
     int numberOfMyShips = 8;                                                                                              // в класс
     int numberOfRivalShips = 8;
 
     public BotsGame() {
         super("Морской бой - Игра");
-        setContentPane(new JLabel(new ImageIcon("D:\\qwe\\out\\production\\qwe\\qwerty\\background2.jpg")));
+        setContentPane(new JLabel(new ImageIcon("D:\\qwe\\out\\production\\qwe\\qwerty\\gameBackground.jpg")));
         setLayout(new BorderLayout());
 
-        msPlayerField = new int[10][10];
-        msPlayer2Field = new int[10][10];
-        msPlayerField = generateShips();
-        msPlayer2Field = generateShips();
+        saveOneField = new int[TEN][TEN];
+        saveTwoField = new int[TEN][TEN];
+        saveOneField = generateShips();
+        saveTwoField = generateShips();
 
         JPanel fieldForButton = new JPanel();
         fieldForButton.setOpaque(false);
@@ -40,55 +40,57 @@ public class BotsGame extends JFrame {
         fieldForButton.add(Play);
 
         // Текстовое уведомление и настройки шрифта
-        final JLabel startText1 = new JLabel("Начните игру");
+        final JLabel startText = new JLabel("Начните игру");
         Icon icon = UIManager.getIcon("OptionPane.informationIcon");
 
-        Font font = new Font("Century Gothic", Font.BOLD, 20);
+        Font font = new Font("Century Gothic", Font.BOLD, SIZE_FONT);
         Border solidBorder = BorderFactory.createLineBorder(Color.BLACK, 5);
-        startText1.setIcon(icon);
-        Dimension labelSize = new Dimension(50, 50);
+        startText.setIcon(icon);
+        Dimension labelSize = new Dimension(SIZE_LABEL, SIZE_LABEL);
 
-        startText1.setVerticalAlignment(JLabel.CENTER);
-        startText1.setHorizontalAlignment(JLabel.CENTER);
-        startText1.setForeground(Color.BLACK);
-        startText1.setPreferredSize(labelSize);
-        startText1.setBorder(solidBorder);
-        startText1.setFont(font);
+        startText.setVerticalAlignment(JLabel.CENTER);
+        startText.setHorizontalAlignment(JLabel.CENTER);
+        startText.setForeground(Color.BLACK);
+        startText.setPreferredSize(labelSize);
+        startText.setBorder(solidBorder);
+        startText.setFont(font);
 
 
         // Поле кораблей 1 бота
-        JPanel field1 = new JPanel();
-        field1.setLayout(new GridLayout(10, 10));
-        field1.setOpaque(false);
+        JPanel oneFieldPanel = new JPanel();
+        oneFieldPanel.setLayout(new GridLayout(TEN, TEN));
+        oneFieldPanel.setOpaque(false);
 
-        field_ms1player = new JButton[10][10];
+        oneField = new JButton[TEN][TEN];
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                field_ms1player[i][j] = new JButton();
-                Dimension sizeButton = new Dimension(45, 45);
-                field_ms1player[i][j].setPreferredSize(sizeButton);
-                field_ms1player[i][j].setContentAreaFilled(false);
-                field_ms1player[i][j].setEnabled(false);
-                field1.add(field_ms1player[i][j]);
+        for (int i = 0; i < TEN; i++) {
+            for (int j = 0; j < TEN; j++) {
+                oneField[i][j] = new JButton();
+                Dimension sizeButton = new Dimension(SIZE_BUTTON, SIZE_BUTTON);
+                oneField[i][j].setPreferredSize(sizeButton);
+                Border solidBorderForField = BorderFactory.createLineBorder(Color.WHITE, 1);
+                oneField[i][j].setBorder(solidBorderForField);
+                oneField[i][j].setContentAreaFilled(false);
+                oneFieldPanel.add(oneField[i][j]);
             }
         }
 
 
         // Поле  кораблей 2 бота
-        JPanel field2 = new JPanel();
-        field2.setLayout(new GridLayout(10, 10));
-        field2.setOpaque(false);
-        field_ms2player = new JButton[10][10];
+        JPanel twoFieldPanel = new JPanel();
+        twoFieldPanel.setLayout(new GridLayout(TEN, TEN));
+        twoFieldPanel.setOpaque(false);
+        twoField = new JButton[TEN][TEN];
 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                field_ms2player[i][j] = new JButton();
-                Dimension sizeButton = new Dimension(45, 45);
-                field_ms2player[i][j].setPreferredSize(sizeButton);
-                field_ms2player[i][j].setContentAreaFilled(false);
-                field_ms2player[i][j].setEnabled(false);
-                field2.add(field_ms2player[i][j]);
+        for (int i = 0; i < TEN; i++) {
+            for (int j = 0; j < TEN; j++) {
+                twoField[i][j] = new JButton();
+                Dimension sizeButton = new Dimension(SIZE_BUTTON, SIZE_BUTTON);
+                twoField[i][j].setPreferredSize(sizeButton);
+                Border solidBorderForField = BorderFactory.createLineBorder(Color.WHITE, 1);
+                twoField[i][j].setBorder(solidBorderForField);
+                twoField[i][j].setContentAreaFilled(false);
+                twoFieldPanel.add(twoField[i][j]);
             }
         }
 
@@ -98,21 +100,20 @@ public class BotsGame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 while (numberOfMyShips != 0 && numberOfRivalShips != 0) {
-                    BotAttack(1);
-                    BotAttack(2);
-                    //TimeUnit.SECONDS.sleep(1);
+                    BotAttack(SHOT_FIRST_BOT);
+                    BotAttack(SHOT_SECOND_BOT);
                 }
                 if (numberOfMyShips == 0) {
-                    startText1.setText("Выиграл 2 бот");
+                    startText.setText("Выиграл 2 бот");
                 } else {
-                    startText1.setText("Выиграл 1 бот");
+                    startText.setText("Выиграл 1 бот");
                 }
 
                 Play.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         BotsGame botsGame = new BotsGame();
-                        botsGame.setSize(1000, 700);
+                        botsGame.setSize(SIZE_WINDOW_HORIZONTAL, SIZE_WINDOW_VERTICAL);
                         botsGame.setResizable(false);
                         botsGame.setLocationRelativeTo(null);
                         botsGame.setVisible(true);
@@ -122,10 +123,10 @@ public class BotsGame extends JFrame {
             }
         });
 
-        add(startText1, BorderLayout.NORTH);
-        add(field2, BorderLayout.EAST);
+        add(startText, BorderLayout.NORTH);
+        add(twoFieldPanel, BorderLayout.EAST);
         add(fieldForButton, BorderLayout.SOUTH);
-        add(field1, BorderLayout.WEST);
+        add(oneFieldPanel, BorderLayout.WEST);
 
     }
 
@@ -135,228 +136,228 @@ public class BotsGame extends JFrame {
             return;
         }
         if (variable == 1) {
-            Random randomi = new Random();
-            int i = randomi.nextInt(10);
+            Random attackI = new Random();
+            int i = attackI.nextInt(TEN);
 
-            Random randomj = new Random();
-            int j = randomj.nextInt(10);
+            Random attackJ = new Random();
+            int j = attackJ.nextInt(TEN);
 
-            if (msPlayerField[i][j] == 2) {                                                                             // Если рандом попал в ту же точку
+            if (saveOneField[i][j] == USED) {                                                                             // Если рандом попал в ту же точку
                 if (numberOfMyShips != 0)
-                    BotAttack(1);                                                                                       // выстрел в новую точку
+                    BotAttack(SHOT_FIRST_BOT);                                                                                       // выстрел в новую точку
             }
 
 
-            if (msPlayerField[i][j] == 1) {                                                                             // Если попал
-                field_ms1player[i][j].setIcon(new ImageIcon("D:\\qwe\\out\\production\\qwe\\qwerty\\fireship.png"));
-                msPlayerField[i][j] = 2;                                                                                // использованная кнопка
+            if (saveOneField[i][j] == SHIP) {                                                                             // Если попал
+                oneField[i][j].setIcon(new ImageIcon("D:\\qwe\\out\\production\\qwe\\qwerty\\fireship.png"));
+                saveOneField[i][j] = USED;                                                                                // использованная кнопка
                 numberOfMyShips--;                                                                                      // на один корабль стало меньше
                 if (i > 0) {                                                                                            // ВСЕ РЯДОМ НАХОДЯЩИЕСЯ ЯЧЕЙКИ СТАНОВЯТСЯ НЕДЕЙСТВИТЕЛЬНЫМИ
-                    field_ms1player[i - 1][j].setContentAreaFilled(true);
-                    field_ms1player[i - 1][j].setBackground(Color.LIGHT_GRAY);
+                    oneField[i - 1][j].setContentAreaFilled(true);
+                    oneField[i - 1][j].setBackground(Color.LIGHT_GRAY);
                     if (j < 9) {
-                        field_ms1player[i - 1][j + 1].setContentAreaFilled(true);
-                        field_ms1player[i - 1][j + 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayerField[i - 1][j + 1] = 2;
+                        oneField[i - 1][j + 1].setContentAreaFilled(true);
+                        oneField[i - 1][j + 1].setBackground(Color.LIGHT_GRAY);
+                        saveOneField[i - 1][j + 1] = USED;
                     }
                     if (j > 0) {
-                        field_ms1player[i - 1][j - 1].setContentAreaFilled(true);
-                        field_ms1player[i - 1][j - 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayerField[i - 1][j - 1] = 2;
+                        oneField[i - 1][j - 1].setContentAreaFilled(true);
+                        oneField[i - 1][j - 1].setBackground(Color.LIGHT_GRAY);
+                        saveOneField[i - 1][j - 1] = USED;
                     }
                 }
                 if (i < 9) {
-                    field_ms1player[i + 1][j].setContentAreaFilled(true);
-                    field_ms1player[i + 1][j].setBackground(Color.LIGHT_GRAY);
+                    oneField[i + 1][j].setContentAreaFilled(true);
+                    oneField[i + 1][j].setBackground(Color.LIGHT_GRAY);
                     if (j < 9) {
-                        field_ms1player[i + 1][j + 1].setContentAreaFilled(true);
-                        field_ms1player[i + 1][j + 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayerField[i + 1][j + 1] = 2;
+                        oneField[i + 1][j + 1].setContentAreaFilled(true);
+                        oneField[i + 1][j + 1].setBackground(Color.LIGHT_GRAY);
+                        saveOneField[i + 1][j + 1] = USED;
                     }
                     if (j > 0) {
-                        field_ms1player[i + 1][j - 1].setContentAreaFilled(true);
-                        field_ms1player[i + 1][j - 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayerField[i + 1][j - 1] = 2;
+                        oneField[i + 1][j - 1].setContentAreaFilled(true);
+                        oneField[i + 1][j - 1].setBackground(Color.LIGHT_GRAY);
+                        saveOneField[i + 1][j - 1] = USED;
                     }
                 }
                 if (j < 9) {
-                    field_ms1player[i][j + 1].setContentAreaFilled(true);
-                    field_ms1player[i][j + 1].setBackground(Color.LIGHT_GRAY);
+                    oneField[i][j + 1].setContentAreaFilled(true);
+                    oneField[i][j + 1].setBackground(Color.LIGHT_GRAY);
                     if (i < 9) {
-                        field_ms1player[i + 1][j + 1].setContentAreaFilled(true);
-                        field_ms1player[i + 1][j + 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayerField[i + 1][j + 1] = 2;
+                        oneField[i + 1][j + 1].setContentAreaFilled(true);
+                        oneField[i + 1][j + 1].setBackground(Color.LIGHT_GRAY);
+                        saveOneField[i + 1][j + 1] = USED;
                     }
                     if (i > 0) {
-                        field_ms1player[i - 1][j + 1].setContentAreaFilled(true);
-                        field_ms1player[i - 1][j + 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayerField[i - 1][j + 1] = 2;
+                        oneField[i - 1][j + 1].setContentAreaFilled(true);
+                        oneField[i - 1][j + 1].setBackground(Color.LIGHT_GRAY);
+                        saveOneField[i - 1][j + 1] = USED;
                     }
                 }
                 if (j > 0) {
-                    field_ms1player[i][j - 1].setContentAreaFilled(true);
-                    field_ms1player[i][j - 1].setBackground(Color.LIGHT_GRAY);
+                    oneField[i][j - 1].setContentAreaFilled(true);
+                    oneField[i][j - 1].setBackground(Color.LIGHT_GRAY);
                     if (i < 0) {
-                        field_ms1player[i - 1][j - 1].setContentAreaFilled(true);
-                        field_ms1player[i - 1][j - 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayerField[i - 1][j - 1] = 2;
+                        oneField[i - 1][j - 1].setContentAreaFilled(true);
+                        oneField[i - 1][j - 1].setBackground(Color.LIGHT_GRAY);
+                        saveOneField[i - 1][j - 1] = USED;
                     }
                     if (i > 9) {
-                        field_ms1player[i + 1][j - 1].setContentAreaFilled(true);
-                        field_ms1player[i + 1][j - 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayerField[i + 1][j - 1] = 2;
+                        oneField[i + 1][j - 1].setContentAreaFilled(true);
+                        oneField[i + 1][j - 1].setBackground(Color.LIGHT_GRAY);
+                        saveOneField[i + 1][j - 1] = USED;
                     }
                 }
                 BotAttack(variable);                                                                                    // Если попал, повторный выстрел
             }
 
-            if (msPlayerField[i][j] == 0) {                                                                             // МИМО
-                msPlayerField[i][j] = 2;
-                field_ms1player[i][j].setContentAreaFilled(true);
-                field_ms1player[i][j].setBackground(Color.LIGHT_GRAY);
+            if (saveOneField[i][j] == CLEAR) {                                                                             // МИМО
+                saveOneField[i][j] = USED;
+                oneField[i][j].setContentAreaFilled(true);
+                oneField[i][j].setBackground(Color.LIGHT_GRAY);
             }
         } else {
-            Random randomi = new Random();
-            int i = randomi.nextInt(10);
+            Random attackI = new Random();
+            int i = attackI.nextInt(TEN);
 
-            Random randomj = new Random();
-            int j = randomj.nextInt(10);
+            Random attackJ = new Random();
+            int j = attackJ.nextInt(TEN);
 
-            if (msPlayer2Field[i][j] == 2) {                                                                            // Если рандом попал в ту же точку
+            if (saveTwoField[i][j] == USED) {                                                                            // Если рандом попал в ту же точку
                 if (numberOfRivalShips != 0)
-                    BotAttack(2);                                                                                       // выстрел в новую точку
+                    BotAttack(SHOT_SECOND_BOT);                                                                                       // выстрел в новую точку
             }
 
-            if (msPlayer2Field[i][j] == 1) {                                                                            // Если попал
-                field_ms2player[i][j].setIcon(new ImageIcon("D:\\qwe\\out\\production\\qwe\\qwerty\\fireship.png"));
-                msPlayer2Field[i][j] = 2;                                                                               // использованная кнопка
+            if (saveTwoField[i][j] == SHIP) {                                                                            // Если попал
+                twoField[i][j].setIcon(new ImageIcon("D:\\qwe\\out\\production\\qwe\\qwerty\\fireship.png"));
+                saveTwoField[i][j] = USED;                                                                               // использованная кнопка
                 numberOfRivalShips--;                                                                                   // на один корабль стало меньше
                 if (i > 0) {                                                                                            // ВСЕ РЯДОМ НАХОДЯЩИЕСЯ ЯЧЕЙКИ СТАНОВЯТСЯ НЕДЕЙСТВИТЕЛЬНЫМИ
-                    field_ms2player[i - 1][j].setContentAreaFilled(true);
-                    field_ms2player[i - 1][j].setBackground(Color.LIGHT_GRAY);
+                    twoField[i - 1][j].setContentAreaFilled(true);
+                    twoField[i - 1][j].setBackground(Color.LIGHT_GRAY);
                     if (j < 9) {
-                        field_ms2player[i - 1][j + 1].setContentAreaFilled(true);
-                        field_ms2player[i - 1][j + 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayer2Field[i - 1][j + 1] = 2;
+                        twoField[i - 1][j + 1].setContentAreaFilled(true);
+                        twoField[i - 1][j + 1].setBackground(Color.LIGHT_GRAY);
+                        saveTwoField[i - 1][j + 1] = USED;
                     }
                     if (j > 0) {
-                        field_ms2player[i - 1][j - 1].setContentAreaFilled(true);
-                        field_ms2player[i - 1][j - 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayer2Field[i - 1][j - 1] = 2;
+                        twoField[i - 1][j - 1].setContentAreaFilled(true);
+                        twoField[i - 1][j - 1].setBackground(Color.LIGHT_GRAY);
+                        saveTwoField[i - 1][j - 1] = USED;
                     }
                 }
                 if (i < 9) {
-                    field_ms2player[i + 1][j].setContentAreaFilled(true);
-                    field_ms2player[i + 1][j].setBackground(Color.LIGHT_GRAY);
+                    twoField[i + 1][j].setContentAreaFilled(true);
+                    twoField[i + 1][j].setBackground(Color.LIGHT_GRAY);
                     if (j < 9) {
-                        field_ms2player[i + 1][j + 1].setContentAreaFilled(true);
-                        field_ms2player[i + 1][j + 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayer2Field[i + 1][j + 1] = 2;
+                        twoField[i + 1][j + 1].setContentAreaFilled(true);
+                        twoField[i + 1][j + 1].setBackground(Color.LIGHT_GRAY);
+                        saveTwoField[i + 1][j + 1] = USED;
                     }
                     if (j > 0) {
-                        field_ms2player[i + 1][j - 1].setContentAreaFilled(true);
-                        field_ms2player[i + 1][j - 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayer2Field[i + 1][j - 1] = 2;
+                        twoField[i + 1][j - 1].setContentAreaFilled(true);
+                        twoField[i + 1][j - 1].setBackground(Color.LIGHT_GRAY);
+                        saveTwoField[i + 1][j - 1] = USED;
                     }
                 }
                 if (j < 9) {
-                    field_ms2player[i][j + 1].setContentAreaFilled(true);
-                    field_ms2player[i][j + 1].setBackground(Color.LIGHT_GRAY);
+                    twoField[i][j + 1].setContentAreaFilled(true);
+                    twoField[i][j + 1].setBackground(Color.LIGHT_GRAY);
                     if (i < 9) {
-                        field_ms2player[i + 1][j + 1].setContentAreaFilled(true);
-                        field_ms2player[i + 1][j + 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayer2Field[i + 1][j + 1] = 2;
+                        twoField[i + 1][j + 1].setContentAreaFilled(true);
+                        twoField[i + 1][j + 1].setBackground(Color.LIGHT_GRAY);
+                        saveTwoField[i + 1][j + 1] = USED;
                     }
                     if (i > 0) {
-                        field_ms2player[i - 1][j + 1].setContentAreaFilled(true);
-                        field_ms2player[i - 1][j + 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayer2Field[i - 1][j + 1] = 2;
+                        twoField[i - 1][j + 1].setContentAreaFilled(true);
+                        twoField[i - 1][j + 1].setBackground(Color.LIGHT_GRAY);
+                        saveTwoField[i - 1][j + 1] = USED;
                     }
                 }
                 if (j > 0) {
-                    field_ms2player[i][j - 1].setContentAreaFilled(true);
-                    field_ms2player[i][j - 1].setBackground(Color.LIGHT_GRAY);
+                    twoField[i][j - 1].setContentAreaFilled(true);
+                    twoField[i][j - 1].setBackground(Color.LIGHT_GRAY);
                     if (i < 0) {
-                        field_ms2player[i - 1][j - 1].setContentAreaFilled(true);
-                        field_ms2player[i - 1][j - 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayer2Field[i - 1][j - 1] = 2;
+                        twoField[i - 1][j - 1].setContentAreaFilled(true);
+                        twoField[i - 1][j - 1].setBackground(Color.LIGHT_GRAY);
+                        saveTwoField[i - 1][j - 1] = USED;
                     }
                     if (i > 9) {
-                        field_ms2player[i + 1][j - 1].setContentAreaFilled(true);
-                        field_ms2player[i + 1][j - 1].setBackground(Color.LIGHT_GRAY);
-                        msPlayer2Field[i + 1][j - 1] = 2;
+                        twoField[i + 1][j - 1].setContentAreaFilled(true);
+                        twoField[i + 1][j - 1].setBackground(Color.LIGHT_GRAY);
+                        saveTwoField[i + 1][j - 1] = USED;
                     }
                 }
                 BotAttack(variable);                                                                                    // Если попал, повторный выстрел
             }
 
-            if (msPlayer2Field[i][j] == 0) {                                                                            // МИМО
-                msPlayer2Field[i][j] = 2;
-                field_ms2player[i][j].setContentAreaFilled(true);
-                field_ms2player[i][j].setBackground(Color.LIGHT_GRAY);
+            if (saveTwoField[i][j] == CLEAR) {                                                                            // МИМО
+                saveTwoField[i][j] = USED;
+                twoField[i][j].setContentAreaFilled(true);
+                twoField[i][j].setBackground(Color.LIGHT_GRAY);
             }
         }
     }
 
 
     int[][] generateShips() {
-        int ms[][];
+        int fieldForRequired[][];
 
-        ms = new int[10][10];
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                ms[i][j] = 0;
+        fieldForRequired = new int[TEN][TEN];
+        for (int i = 0; i < TEN; i++) {
+            for (int j = 0; j < TEN; j++) {
+                fieldForRequired[i][j] = CLEAR;
             }
         }
-        int n = 0;
-        while (n != 9) {
-            Random ri = new Random();
-            int k = ri.nextInt(10);
-            Random rj = new Random();
-            int l = rj.nextInt(10);
+        int numberShip = 0;
+        while (numberShip != 9) {
+            Random plaseToI = new Random();
+            int k = plaseToI.nextInt(TEN);
+            Random plaseToJ = new Random();
+            int l = plaseToJ.nextInt(TEN);
             if (k > 0) {
-                if (ms[k - 1][l] == 1) continue;
+                if (fieldForRequired[k - 1][l] == 1) continue;
 
                 if (l > 0)
-                    if (ms[k - 1][l - 1] == 1) continue;
+                    if (fieldForRequired[k - 1][l - 1] == SHIP) continue;
                 if (l < 9)
-                    if (ms[k - 1][l + 1] == 1) continue;
+                    if (fieldForRequired[k - 1][l + 1] == SHIP) continue;
 
             }
 
             if (k < 9) {
-                if (ms[k + 1][l] == 1) continue;
+                if (fieldForRequired[k + 1][l] == SHIP) continue;
 
                 if (l > 0)
-                    if (ms[k + 1][l - 1] == 1) continue;
+                    if (fieldForRequired[k + 1][l - 1] == SHIP) continue;
                 if (l < 9)
-                    if (ms[k + 1][l + 1] == 1) continue;
+                    if (fieldForRequired[k + 1][l + 1] == SHIP) continue;
 
             }
 
             if (l < 9) {
-                if (ms[k][l + 1] == 1) continue;
+                if (fieldForRequired[k][l + 1] == SHIP) continue;
 
                 if (k > 0)
-                    if (ms[k - 1][l + 1] == 1) continue;
+                    if (fieldForRequired[k - 1][l + 1] == SHIP) continue;
                 if (k < 9)
-                    if (ms[k + 1][l + 1] == 1) continue;
+                    if (fieldForRequired[k + 1][l + 1] == SHIP) continue;
 
             }
 
             if (l > 0) {
-                if (ms[k][l - 1] == 1) continue;
+                if (fieldForRequired[k][l - 1] == SHIP) continue;
 
                 if (k > 0)
-                    if (ms[k - 1][l - 1] == 1) continue;
+                    if (fieldForRequired[k - 1][l - 1] == SHIP) continue;
                 if (k < 9)
-                    if (ms[k + 1][l - 1] == 1) continue;
+                    if (fieldForRequired[k + 1][l - 1] == SHIP) continue;
             }
 
-            n++;
-            ms[k][l] = 1;
+           numberShip++;
+            fieldForRequired[k][l] = SHIP;
         }
-        return ms;
+        return fieldForRequired;
     }
 }
 
