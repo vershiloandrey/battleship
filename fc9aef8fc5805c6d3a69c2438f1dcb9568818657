@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_3c35ca45",
+        "filename": "BotsGame.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1007785
+      },
+      "writtenOn": "2016-04-13T05:43:20Z",
+      "side": 1,
+      "message": "https://google.github.io/styleguide/javaguide.html#s5.2.6-parameter-names",
+      "range": {
+        "startLine": 16,
+        "startChar": 3,
+        "endLine": 17,
+        "endChar": 32
+      },
+      "revId": "fc9aef8fc5805c6d3a69c2438f1dcb9568818657",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_1c3a0637",
+        "filename": "BotsGame.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1007785
+      },
+      "writtenOn": "2016-04-13T05:43:20Z",
+      "side": 1,
+      "message": "Define 10,and make more suitable varible names.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 41
+      },
+      "revId": "fc9aef8fc5805c6d3a69c2438f1dcb9568818657",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_fc3f6223",
+        "filename": "BotsGame.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1007785
+      },
+      "writtenOn": "2016-04-13T05:43:20Z",
+      "side": 1,
+      "message": "starText, not startText1",
+      "revId": "fc9aef8fc5805c6d3a69c2438f1dcb9568818657",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
